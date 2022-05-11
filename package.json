@@ -16,10 +16,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/RubensAlgeri/projeto14-tokyo-candy-store-back/issues"
-  },
-  "homepage": "https://github.com/RubensAlgeri/projeto14-tokyo-candy-store-back#readme",
   "dependencies": {
     "bcrypt": "^5.0.1",
     "chalk": "^5.0.1",
