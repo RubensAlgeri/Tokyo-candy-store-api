@@ -8,12 +8,9 @@ export async function postCart(req, res) {
         quantity: req.body.quantity
     }
     const id = req.params.id;
-    const userCart = await db.collection('carts').findOne({ userId: id })
-    if (!userCart) {
-        await db.collection('carts').insertOne({ userId: id, ...cart });
-        return
-    }
-    await db.collection('carts').updateOne({ userId: id }, { $set: {...userCart, ...cart }})
+
+    await db.collection('carts').insertOne({ userId: id, ...cart });
+
     res.sendStatus(201);
 }
 
@@ -23,7 +20,7 @@ export async function getCart(req, res) {
     const id = req.params.id;
     delete user.password;
 
-    const cart = await db.collection('carts').findOne({ userId: id })
+    const cart = await db.collection('carts').find({ userId: id }).toArray();
     // let total = 0;
     // cart.forEach(item => {
     //     total += item.price * 1;
