@@ -14,3 +14,14 @@ export async function getCart(req, res) {
     })
     res.status(200).send({cart, total})
 }
+export async function removeProduct(req, res) {
+
+    const id = req.params.id;
+    const { user } = res.locals;
+
+    delete user.password;
+
+    const cart = await db.collection('carts').removeOne({_id: new ObjectId(id)})
+
+    res.sendStatus(200);
+}
