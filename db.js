@@ -7,6 +7,6 @@ const mongoClient = new MongoClient(process.env.MONGO_URI);
 
 await mongoClient.connect();
 
-const db = mongoClient.db("productsDataBase");
+const db = mongoClient.db("tokyo-candy-store");
 console.log(chalk.bold.blue("Banco de dados MongoDB conectado!"));
 export default db;
