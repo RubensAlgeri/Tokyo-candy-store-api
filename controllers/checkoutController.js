@@ -7,5 +7,8 @@ export async function postOrder(req, res) {
     delete user.password;
 
     await db.collection('orders').insertOne(req.body)
+
+    await db.collection('carts').deleteOne({_id: new ObjectId(user._id)})
+
     res.sendStatus(201)
 }
