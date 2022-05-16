@@ -8,7 +8,7 @@ export async function postOrder(req, res) {
 
     await db.collection('orders').insertOne(req.body)
 
-    await db.collection('carts').deleteOne({_id: new ObjectId(user._id)})
+    await db.collection('carts').delete({ _id: new ObjectId(user._id) })
 
     res.sendStatus(201)
 }

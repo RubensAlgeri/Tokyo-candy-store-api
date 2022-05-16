@@ -21,10 +21,7 @@ export async function getCart(req, res) {
     delete user.password;
 
     const cart = await db.collection('carts').find({ userId: id }).toArray();
-    // let total = 0;
-    // cart.forEach(item => {
-    //     total += item.price * 1;
-    // })
+
     res.status(200).send(cart)
 }
 export async function removeProduct(req, res) {
@@ -34,7 +31,7 @@ export async function removeProduct(req, res) {
 
     delete user.password;
 
-    const cart = await db.collection('carts').removeOne({ _id: new ObjectId(id) })
+    await db.collection('carts').removeOne({_id: new ObjectId(id) })
 
     res.sendStatus(200);
 }
