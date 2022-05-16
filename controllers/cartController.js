@@ -1,48 +1,27 @@
 import db from '../db.js';
-
-export async function getCart(req, res) {
-    const {authorization} = req.headers;
-    const token = authorization?.replace('Bearer', '').trim();
-    if(!token) return res.sendStatus(401);
-
-    try {
-        const session = await db.collection('sessions').findOne({token});
-        if(!session) return res.sendStatus(401);
-
-        const user = await db.collection('carts').find({userId: session.userId}).toArray();
-        if(!user) return res.sendStatus(404);
-
-        user.map(item => {
-            delete item._id;
-            delete item.userId;
-        });
-        //res.locals.user = user;
-        //next();
-        console.log('user', user);
-        res.send(user);
-    } catch {
-            res.status(404).send('TOKEN inválido');
-            console.log('TOKEN inválido');
-        }
-}
+import { ObjectId } from "mongodb";
 
 export async function postCart(req, res) {
-    const { authorization } = req.headers;
+    const { user } = res.locals;
     const cart = {
-        product : req.body.product,
-        quantity : req.body.quantity
+        product: req.body.product,
+        quantity: req.body.quantity
     }
 
-    const token = authorization?.replace('Bearer', '').trim();
-    if(!token) return res.sendStatus(401);
+    await db.collection('carts').insertOne({ userId: user._Id, ...cart });
+    res.sendStatus(201);
+}
 
-    try {
-        const session = await db.collection('sessions').findOne({ token });
-        if(!session) return res.sendStatus(401);
+export async function getCart(req, res) {
 
-        await db.collection('carts').insertOne({userId: session.userId, ...cart});
-        res.sendStatus(201);
-    } catch (error) {
-        res.send(error).status('token invalido');
-    }
+    const { user } = res.locals;
+
+    delete user.password;
+
+    const cart = await db.collection('carts').findOne({ _id: new ObjectId(user._id) })
+    let total = 0;
+    cart.forEach(item => {
+        total += item.price * 1;
+    })
+    res.status(200).send({ cart, total })
 }
